@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -9,78 +10,20 @@ import {
   useLocation,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import type { ConvexQueryClient } from "@convex-dev/react-query";
-import type { ConvexReactClient } from "convex/react";
-import { getAuthAction, getIdTokenAction } from "@usehercules/auth-tanstack";
-import type { ClientUserInfo, NoUserInfo } from "@usehercules/auth-tanstack";
-import ConvexAppProvider from "@/components/providers/convex.tsx";
 import ThemeProvider from "@/components/providers/theme.tsx";
 import RouteError from "@/components/route-error.tsx";
 import { buttonVariants } from "@/components/ui/button.tsx";
 import { Toaster } from "@/components/ui/sonner.tsx";
 import { TooltipProvider } from "@/components/ui/tooltip.tsx";
-import { useAuthErrorToast } from "@/hooks/use-auth-error-toast.ts";
 import { site } from "@/lib/site.ts";
 import appCss from "@/index.css?url";
 
-
-// const FONTS_HREF =
-//   "/_hercules/font/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400..700&display=swap";
-
-const FONTS_HREF = "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
-
-// The client reuses one session snapshot across navigations (`getAuthAction`
-// is a round trip) until it is a minute old or the tab was hidden.
-const CLIENT_AUTH_TTL_MS = 60_000;
-
-let clientAuth:
-  | { promise: Promise<ClientUserInfo | NoUserInfo>; fetchedAt: number }
-  | undefined;
-let clearsOnHide = false;
-
-function getClientAuth(): Promise<ClientUserInfo | NoUserInfo> {
-  if (!clearsOnHide) {
-    clearsOnHide = true;
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") clientAuth = undefined;
-    });
-  }
-  const now = Date.now();
-  if (
-    clientAuth === undefined ||
-    now - clientAuth.fetchedAt > CLIENT_AUTH_TTL_MS
-  ) {
-    const promise = getAuthAction().catch((error: unknown) => {
-      // Don't cache a rejection: let the next navigation retry.
-      if (clientAuth?.promise === promise) clientAuth = undefined;
-      throw error;
-    });
-    clientAuth = { promise, fetchedAt: now };
-  }
-  return clientAuth.promise;
-}
+const FONTS_HREF =
+  "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
-  convexClient: ConvexReactClient;
-  convexQueryClient: ConvexQueryClient;
 }>()({
-  // During SSR the ID token authenticates the server Convex client; only the
-  // sanitized session reaches the browser.
-  beforeLoad: async (ctx) => {
-    const serverHttpClient = ctx.context.convexQueryClient.serverHttpClient;
-    if (serverHttpClient) {
-      const [auth, idToken] = await Promise.all([
-        getAuthAction(),
-        getIdTokenAction(),
-      ]);
-      if (idToken) {
-        serverHttpClient.setAuth(idToken);
-      }
-      return { auth };
-    }
-    return { auth: await getClientAuth() };
-  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -101,13 +44,7 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootComponent() {
-  const { convexClient, auth } = Route.useRouteContext();
-  useAuthErrorToast(auth.user !== null);
-  return (
-    <ConvexAppProvider client={convexClient} initialAuth={auth}>
-      <Outlet />
-    </ConvexAppProvider>
-  );
+  return <Outlet />;
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
