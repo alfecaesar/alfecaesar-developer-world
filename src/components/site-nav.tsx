@@ -61,7 +61,7 @@ export default function SiteNav() {
         </ul>
 
         <div className="flex items-center gap-1">
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             onClick={audio.toggle}
@@ -70,7 +70,7 @@ export default function SiteNav() {
             className="rounded-full"
           >
             {audio.playing ? <Volume2Icon /> : <VolumeXIcon />}
-          </Button>
+          </Button> */}
           <ThemeToggle />
           <Button
             render={<a href="#contact" onClick={go("contact")} />}
