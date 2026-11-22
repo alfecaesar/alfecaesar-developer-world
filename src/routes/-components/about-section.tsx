@@ -19,24 +19,24 @@ const AboutScene = lazy(() => import("@/components/three/about-scene.tsx"));
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const PARAGRAPHS = [
-  "I'm Alfe Caesar Lagas, a Front-End Engineer with 18 years of experience creating websites, eCommerce experiences, and web applications.",
-  "My primary focus is Shopify and WordPress development, along with modern front-end technologies. I enjoy transforming designs into functional, responsive, and user-friendly digital experiences.",
-  "I work with businesses, agencies, and teams to build, improve, and maintain digital products that deliver real value.",
+  "I'm Alfe Caesar Lagas, a Senior Front-End Developer with 18 years of experience building websites, eCommerce platforms, and web applications.",
+  "My core expertise is in Shopify and WordPress development, complemented by experience with modern front-end technologies like React.js and Next.js. I enjoy turning designs and ideas into functional, responsive, and user-friendly digital experiences.",
+  "Throughout my career, I've worked with businesses, agencies, and development teams to build, improve, and maintain websites and digital products. I value clean code, practical solutions, and creating experiences that not only look good but work well for the people who use them.",
 ];
 
 const DETAILS = [
   { label: "Name", value: PROFILE.name, Icon: UserRoundIcon },
   { label: "Title", value: PROFILE.title, Icon: BriefcaseIcon },
   { label: "Location", value: PROFILE.location, Icon: MapPinIcon },
-  { label: "Experience", value: "18 Years", Icon: CalendarClockIcon },
+  { label: "Experience", value: "18 Years in Web Development", Icon: CalendarClockIcon },
   { label: "Specialization", value: "Shopify, WordPress, and Web Application Development", Icon: CodeXmlIcon },
   { label: "Availability", value: "Open to Remote Work and Freelance Opportunities", Icon: SparklesIcon },
 ];
 
 const COUNTERS = [
-  { label: "Years of Development Experience", prefix: null, value: 18, suffix: "" },
-  { label: "Shopify Stores Worked On", prefix: 30, value: 40, suffix: "" },
-  { label: "Websites Maintained and Optimized", prefix: null, value: 40, suffix: "+" },
+  { label: "WordPress Development Experience", sublabel: "Years", prefix: null, value: 10, suffix: "+" },
+  { label: "Shopify Development Experience", sublabel: "Years", prefix: null, value: 6, suffix: "+" },
+  { label: "Completed, Maintained and Optimized", sublabel: "Websites", prefix: null, value: 70, suffix: "+" },
 ];
 
 const BADGES = ["Shopify & Liquid", "WordPress & PHP", "Remote-Friendly"];
@@ -58,7 +58,7 @@ export default function AboutSection() {
 
   return (
     <SectionShell id="about" eyebrow="// about" title="The Person Behind the Code" className="overflow-hidden">
-      <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+      <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
         <motion.div
           initial={{ opacity: 0, scale: 0.94 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -127,7 +127,7 @@ export default function AboutSection() {
       </div>
 
       <ul className="grid gap-4 pt-12 sm:grid-cols-3">
-        {COUNTERS.map(({ label, prefix, value, suffix }, i) => (
+        {COUNTERS.map(({ label, prefix, value, suffix, sublabel }, i) => (
           <motion.li
             key={label}
             initial={{ opacity: 0, y: 20 }}
@@ -147,6 +147,7 @@ export default function AboutSection() {
               <CountUp to={value} from={prefix ?? 0} />
               {suffix}
             </p>
+            <p className="relative pt-3 font-bold text-primary text-xl uppercase">{sublabel}</p>
             <p className="relative pt-2 font-medium text-foreground/80">{label}</p>
           </motion.li>
         ))}

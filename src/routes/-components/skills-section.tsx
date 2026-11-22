@@ -72,7 +72,7 @@ export default function SkillsSection() {
       id="skills"
       eyebrow="// skills"
       title="My Developer Toolkit"
-      intro="The platforms, languages and tools I use every day. Click any floating object to learn how I use it."
+      intro="The technologies, platforms, and tools I use to build modern web experiences. Explore the floating objects to discover how I use each one."
       className="overflow-hidden bg-gradient-to-b from-background via-secondary/40 to-background"
     >
       <div role="tablist" aria-label="Skill categories" className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none]">

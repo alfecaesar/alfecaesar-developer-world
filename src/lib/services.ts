@@ -103,17 +103,55 @@ export const SERVICES: Service[] = [
 export type ExperienceArea = { title: string; description: string; Icon: LucideIcon };
 
 /** Areas of experience. Deliberately no employers or dates. */
+
 export const EXPERIENCE_AREAS: ExperienceArea[] = [
-  { title: "Front-End Development", Icon: AppWindowIcon, description: "Building responsive, accessible interfaces with HTML, CSS and JavaScript." },
-  { title: "Shopify eCommerce Development", Icon: ShoppingBagIcon, description: "Developing and customizing Shopify storefronts and themes." },
-  { title: "WordPress Development", Icon: GlobeIcon, description: "Creating and extending WordPress websites for different business needs." },
-  { title: "Website Customization", Icon: LayoutTemplateIcon, description: "Adapting existing sites and themes to new designs and requirements." },
-  { title: "Custom Theme and Plugin Development", Icon: PuzzleIcon, description: "Writing bespoke themes and plugins instead of forcing off-the-shelf fits." },
-  { title: "Website Performance Optimization", Icon: GaugeIcon, description: "Improving load times and front-end performance." },
-  { title: "Conversion Rate Optimization", Icon: TrendingUpIcon, description: "Refining layouts and flows to make it easier for visitors to take action." },
-  { title: "Agency and International Client Collaboration", Icon: HandshakeIcon, description: "Working with agencies, teams and clients across time zones." },
-  { title: "Website Maintenance and Technical Support", Icon: LifeBuoyIcon, description: "Keeping sites updated, stable and running smoothly over time." },
+  {
+    title: "Front-End Development",
+    Icon: AppWindowIcon,
+    description: "Building responsive, user-friendly interfaces with modern front-end technologies, clean code, and a strong focus on usability."
+  },
+  {
+    title: "Shopify eCommerce Development",
+    Icon: ShoppingBagIcon,
+    description: "Customizing Shopify themes, developing storefront features, and creating seamless shopping experiences that support business growth."
+  },
+  {
+    title: "WordPress Development",
+    Icon: GlobeIcon,
+    description: "Developing and extending WordPress websites with custom functionality, flexible content management, and tailored solutions."
+  },
+  {
+    title: "Website and Theme Customization",
+    Icon: LayoutTemplateIcon,
+    description: "Transforming existing websites and themes to match design requirements, improve usability, and deliver the right functionality."
+  },
+  {
+    title: "Custom Theme and Plugin Development",
+    Icon: PuzzleIcon,
+    description: "Building tailored themes, plugins, and reusable components that extend platform capabilities and meet specific project needs."
+  },
+  {
+    title: "Website Performance Optimization",
+    Icon: GaugeIcon,
+    description: "Improving loading speed, responsiveness, and front-end efficiency for faster, smoother website experiences."
+  },
+  {
+    title: "Conversion Rate Optimization",
+    Icon: TrendingUpIcon,
+    description: "Enhancing user journeys, product pages, layouts, and interactions to reduce friction and encourage meaningful conversions."
+  },
+  {
+    title: "Agency and International Client Collaboration",
+    Icon: HandshakeIcon,
+    description: "Partnering with agencies, developers, and international clients to deliver projects, coordinate workflows, and meet shared goals across time zones."
+  },
+  {
+    title: "Website Maintenance and Technical Support",
+    Icon: LifeBuoyIcon,
+    description: "Maintaining website reliability through ongoing updates, troubleshooting, technical improvements, and proactive support."
+  },
 ];
+
 
 export type ProcessStage = {
   id: "discover" | "plan" | "design" | "develop" | "test" | "launch";

@@ -3,16 +3,18 @@ export const PROFILE = {
     name: "Alfe Caesar Lagas",
     shortName: "Alfe Caesar",
     initials: "<AC>",
-    title: "Senior Front-End Engineer",
-    roles: ["Shopify Developer", "WordPress Developer"],
+    title: "Senior Front-End Developer",
+    roles: ["Shopify", "WordPress", "React.js", "Next.js"],
+    email: "alfecaesar@gmail.com",
     statement:
-      "Turning ideas into beautiful, functional, and scalable digital experiences.",
+      "Building high-performing, scalable, and engaging digital experiences through modern web technologies and thoughtful development.",
     location: "Misamis Occidental, Philippines",
     availability: "Open to Remote Opportunities",
     links: {
-      portfolio: "https://alfecaesar-portfolio2026.vercel.app/",
+      portfolio: "https://alfecaesar-developer-world.vercel.app/",
       github: "https://github.com/alfecaesar",
       linkedin: "https://www.linkedin.com/in/alfe-caesar-l-24663535/",
+      cv: "https://drive.google.com/file/d/1eSfr-E_UHk1Fr0ztWJSJ3KO7yhQTddBM/view?usp=sharing"
     },
   } as const;
   

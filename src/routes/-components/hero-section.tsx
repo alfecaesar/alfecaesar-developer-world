@@ -1,6 +1,6 @@
 import { lazy, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRightIcon, MapPinIcon, MousePointerClickIcon, Undo2Icon } from "lucide-react";
+import { ArrowRightIcon, MapPinIcon, MousePointerClickIcon, Undo2Icon, Mail, FileUser, BriefcaseBusiness, ArrowUpRight, MessageCircle, } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import IslandFallback from "@/components/three/island-fallback.tsx";
 import SceneMount from "@/components/three/scene-mount.tsx";
@@ -52,7 +52,7 @@ export default function HeroSection() {
               </p>
               <h1
                 id="hero-title"
-                className="pt-3 font-display text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-5xl lg:text-5xl"
+                className="pt-3 font-display text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-5xl lg:text-5xl mb-5"
               >
                 Hello, I&apos;m{" "}
                 <span className="bg-gradient-to-r from-primary via-[#4f8dff] to-[#22b8d4] bg-clip-text text-transparent dark:to-[#7de8f5]">
@@ -60,6 +60,7 @@ export default function HeroSection() {
                 </span>
                 .
               </h1>
+              <h3 className="text-2xl font-bold font-semibold">{ PROFILE.title }</h3>
               <ul className="flex flex-wrap gap-x-3 gap-y-1 pt-5 text-sm font-semibold text-foreground/80 sm:text-base">
                 {PROFILE.roles.map((role, i) => (
                   <li key={role} className="flex items-center gap-3">
@@ -83,15 +84,45 @@ export default function HeroSection() {
                   <MousePointerClickIcon data-icon="inline-end" />
                 </Button>
                 */ }
+                
                 <Button
                   size="lg"
-                  variant="secondary"
-                  className="h-12 rounded-full px-6 text-base"
+                  variant="outline"
+                  className="h-12 rounded-full border-primary/30 px-6 text-base transition-all hover:border-primary hover:bg-primary/5"
+                  onClick={() => scrollToSection("portfolio")}
+                >
+                  <BriefcaseBusiness className="size-4" />
+                  Explore My Work
+                  <ArrowUpRight className="size-4" />
+                </Button>
+
+                <Button
+                  size="lg"
+                  className="h-12 rounded-full px-6 text-base shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-primary/30"
                   onClick={() => scrollToSection("contact")}
                 >
-                  Let&apos;s Work Together
-                  <ArrowRightIcon data-icon="inline-end" />
+                  <MessageCircle className="size-4" />
+                  Get in Touch
                 </Button>
+                {/* <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PROFILE.email)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30"
+                >
+                  <Mail className="size-4" />
+                  Get in Touch
+                </a> */}
+
+                {/* <a
+                  href={PROFILE.links.cv}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-background/60 px-6 text-base font-medium text-foreground backdrop-blur transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent"
+                >
+                  <FileUser className="size-4" />
+                  View Resume
+                </a> */}
               </div>
             </motion.div>
           )}

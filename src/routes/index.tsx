@@ -9,6 +9,9 @@ import SkillsSection from "./-components/skills-section.tsx";
 import ServicesSection from "./-components/services-section.tsx";
 import ExperienceSection from "./-components/experience-section.tsx";
 import ProcessSection from "./-components/process-section.tsx";
+import PortfolioSection from "./-components/portfolio-section.tsx";
+import ContactSection from "./-components/contact-section.tsx";
+import ResumeCTASection from "./-components/resume-cta-section.tsx";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -32,8 +35,11 @@ function Index() {
         <ServicesSection />
         <ExperienceSection />
         <ProcessSection />
+        <PortfolioSection />
+        <ContactSection />
+        <ResumeCTASection />
         {/* Contact is built in the next milestone; the heading keeps the nav link working */}
-        <SectionShell id="contact" eyebrow="// contact" title="Have an Idea? Let's Build It Together." />
+        {/* <SectionShell id="contact" eyebrow="// contact" title="Have an Idea? Let's Build It Together." /> */}
       </main>
       <SiteFooter />
     </>
