@@ -18,6 +18,8 @@ import { TooltipProvider } from "@/components/ui/tooltip.tsx";
 import { site } from "@/lib/site.ts";
 import appCss from "@/index.css?url";
 
+const GTM_ID = "GTM-KSSVNDCV";
+
 const FONTS_HREF =
   "https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap";
 
@@ -51,15 +53,43 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){
+                w[l]=w[l]||[];
+                w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+                var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),
+                    dl=l!='dataLayer'?'&l='+l:'';
+                j.async=true;
+                j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${GTM_ID}');
+            `,
+          }}
+        />
         <HeadContent />
       </head>
+
       <body>
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+            title="Google Tag Manager"
+          />
+        </noscript>
+
         <ThemeProvider>
           <TooltipProvider>
             <Toaster />
             {children}
           </TooltipProvider>
         </ThemeProvider>
+
         <Scripts />
       </body>
     </html>
