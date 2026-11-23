@@ -14,7 +14,7 @@ export const PROFILE = {
       portfolio: "https://alfecaesar-developer-world.vercel.app/",
       github: "https://github.com/alfecaesar",
       linkedin: "https://www.linkedin.com/in/alfe-caesar-l-24663535/",
-      cv: "https://drive.google.com/file/d/1eSfr-E_UHk1Fr0ztWJSJ3KO7yhQTddBM/view?usp=sharing"
+      cv: "https://drive.google.com/file/d/1729f2eoA2sQPlcDgQWCsP3dXu5foU3qP/view?usp=sharing"
     },
   } as const;
   
