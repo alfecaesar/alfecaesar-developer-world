@@ -1,89 +1,120 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import { Sparkles } from "@react-three/drei";
-import type { Group } from "three";
-import Developer from "./developer.tsx";
+import { Suspense, useLayoutEffect, useRef } from "react";
+import type { ComponentType } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
+import { SRGBColorSpace } from "three";
+import type { Group, PerspectiveCamera, Texture } from "three";
 import FloatingObject from "./floating-object.tsx";
-import { PALETTE, type Vec3 } from "./palette.ts";
-import PointerTilt from "./pointer-tilt.tsx";
 import StageCanvas from "./stage.tsx";
 import { AtomIcon, BagIcon, CodeIcon, DiscIcon } from "./tech-icons.tsx";
 
 export type AboutSceneProps = { compact: boolean; animate: boolean; running: boolean };
 
-const BADGES: Array<{ label: string; position: Vec3; scale: number; Icon: () => React.JSX.Element }> = [
-  { label: "Shopify", position: [-1.7, 2.3, 0.2], scale: 0.5, Icon: () => <BagIcon /> },
-  { label: "WordPress", position: [1.75, 2.1, 0], scale: 0.5, Icon: () => <DiscIcon /> },
-  { label: "Front-End", position: [-1.4, 0.9, 0.9], scale: 0.38, Icon: () => <CodeIcon /> },
-  { label: "React", position: [1.5, 0.7, 0.9], scale: 0.42, Icon: () => <AtomIcon /> },
+const PORTRAIT_URL =
+  "https://tenayrdhmsvcgkxkoqhk.supabase.co/storage/v1/object/public/assets/others/avatar.png";
+
+/** Distance of the background from the camera. Must be farther than the badges. */
+const BACKGROUND_DISTANCE = 14;
+/** Slight oversize so no hairline gaps show at the edges. */
+const OVERSCAN = 1.03;
+
+/** Which part of the image stays visible when cropped: 0 = top/left, 0.5 = center, 1 = bottom/right. */
+const FOCUS_Y = 0.25;
+const FOCUS_X = 0.5;
+
+type Badge = {
+  label: string;
+  /** Position as a fraction of the visible half-width / half-height (-1 to 1). */
+  x: number;
+  y: number;
+  z: number;
+  scale: number;
+  Icon: ComponentType;
+};
+
+const BADGES: ReadonlyArray<Badge> = [
+  { label: "Shopify", x: -0.72, y: 0.5, z: 0.4, scale: 0.5, Icon: BagIcon },
+  { label: "Front-End", x: -0.62, y: -0.3, z: 0.7, scale: 0.4, Icon: CodeIcon },
+  { label: "WordPress", x: 0.72, y: 0.4, z: 0.4, scale: 0.5, Icon: DiscIcon },
+  { label: "React", x: 0.62, y: -0.4, z: 0.7, scale: 0.42, Icon: AtomIcon },
 ];
 
-function Platform({ animate }: { animate: boolean }) {
-  const ring = useRef<Group>(null);
-  useFrame((_, delta) => {
-    if (animate && ring.current) ring.current.rotation.y += delta * 0.4;
+/** Portrait glued to the camera and scaled to cover the whole canvas, on any screen shape. */
+function PortraitBackground() {
+  const texture = useTexture(PORTRAIT_URL) as Texture;
+  const rig = useRef<Group>(null);
+  const camera = useThree((s) => s.camera) as PerspectiveCamera;
+  const size = useThree((s) => s.size);
+
+  useLayoutEffect(() => {
+    texture.colorSpace = SRGBColorSpace;
+    texture.anisotropy = 8;
+    texture.needsUpdate = true;
+  }, [texture]);
+
+  // Follow the camera so the plane always faces the lens, whatever the camera does
+  useFrame(() => {
+    if (!rig.current) return;
+    rig.current.position.copy(camera.position);
+    rig.current.quaternion.copy(camera.quaternion);
   });
+
+  // Visible area at the background's distance, from the canvas's real pixel size
+  const visibleH = 2 * Math.tan((camera.fov * Math.PI) / 360) * BACKGROUND_DISTANCE;
+  const visibleW = visibleH * (size.width / Math.max(size.height, 1));
+
+  const image = texture.image as { width: number; height: number } | undefined;
+  const imageAspect = image && image.height ? image.width / image.height : 0.8;
+
+  // Cover: scale until both dimensions fill the canvas, then crop the overflow
+  const canvasAspect = visibleW / visibleH;
+  const width = (imageAspect >= canvasAspect ? visibleH * imageAspect : visibleW) * OVERSCAN;
+  const height = width / imageAspect;
+
+  // Shift (in camera space) so the chosen focus point stays in view
+  const offsetX = (0.5 - FOCUS_X) * (width - visibleW);
+  const offsetY = (FOCUS_Y - 0.5) * (height - visibleH);
+
   return (
-    <group position={[0, -0.85, 0]}>
-      <mesh>
-        <cylinderGeometry args={[1.5, 1.2, 0.35, 32]} />
-        <meshStandardMaterial color={PALETTE.grass} />
+    <group ref={rig}>
+      <mesh position={[offsetX, offsetY, -BACKGROUND_DISTANCE]} renderOrder={-1}>
+        <planeGeometry args={[width, height]} />
+        <meshBasicMaterial map={texture} toneMapped={false} depthWrite={false} />
       </mesh>
-      <mesh position={[0, -0.45, 0]}>
-        <coneGeometry args={[1.2, 1.1, 7]} />
-        <meshStandardMaterial color={PALETTE.rock} flatShading />
-      </mesh>
-      <group ref={ring} position={[0, 0.19, 0]}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[1.05, 1.15, 48, 1, 0, Math.PI * 1.4]} />
-          <meshStandardMaterial color={PALETTE.cyan} emissive={PALETTE.cyan} emissiveIntensity={0.8} />
-        </mesh>
-      </group>
-      {/* A small potted plant beside the developer */}
-      <group position={[0.85, 0.3, -0.35]}>
-        <mesh>
-          <cylinderGeometry args={[0.14, 0.11, 0.24, 14]} />
-          <meshStandardMaterial color={PALETTE.pot} />
-        </mesh>
-        <mesh position={[0, 0.25, 0]}>
-          <icosahedronGeometry args={[0.2, 0]} />
-          <meshStandardMaterial color={PALETTE.leaf} flatShading />
-        </mesh>
-      </group>
     </group>
   );
 }
 
-function BobbingDeveloper({ animate }: { animate: boolean }) {
-  const group = useRef<Group>(null);
-  useFrame((state) => {
-    if (animate && group.current) group.current.position.y = Math.sin(state.clock.elapsedTime * 1.2) * 0.04;
-  });
+function FloatingBadges({ animate }: { animate: boolean }) {
+  const viewport = useThree((s) => s.viewport);
+  const halfW = viewport.width / 2;
+  const halfH = viewport.height / 2;
+
   return (
-    <group ref={group}>
-      <Developer pose="standing" animate={animate} />
-    </group>
+    <>
+      {BADGES.map(({ label, x, y, z, scale, Icon }) => (
+        <FloatingObject
+          key={label}
+          label={label}
+          position={[x * halfW, y * halfH, z]}
+          scale={scale}
+          animate={animate}
+        >
+          <Icon />
+        </FloatingObject>
+      ))}
+    </>
   );
 }
 
-/** The developer character on a small floating platform, waving hello. */
+/** Full-bleed portrait background with animated tech badges at either side. */
 export default function AboutScene({ compact, animate, running }: AboutSceneProps) {
   return (
-    <StageCanvas compact={compact} running={running} cameraPosition={[0, 0.9, compact ? 8.6 : 7.8]}>
-      <PointerTilt strength={animate ? 0.35 : 0}>
-        <group position={[0, -0.25, 0]}>
-          <Platform animate={animate} />
-          <BobbingDeveloper animate={animate} />
-          {BADGES.map(({ label, position, scale, Icon }) => (
-            <FloatingObject key={label} label={label} position={position} scale={scale} animate={animate}>
-              <Icon />
-            </FloatingObject>
-          ))}
-        </group>
-      </PointerTilt>
-      {!compact && (
-        <Sparkles count={30} scale={[5, 4, 3]} position={[0, 1, 0]} size={3} speed={animate ? 0.3 : 0} color={PALETTE.violet} />
-      )}
+    <StageCanvas compact={compact} running={running} cameraPosition={[0, 0, compact ? 9 : 8]}>
+      <Suspense fallback={null}>
+        <PortraitBackground />
+      </Suspense>
+      <FloatingBadges animate={animate} />
     </StageCanvas>
   );
 }

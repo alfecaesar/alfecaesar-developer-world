@@ -88,12 +88,11 @@ export default function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="h-12 rounded-full border-primary/30 px-6 text-base transition-all hover:border-primary hover:bg-primary/5"
+                  className="h-12 rounded-full border-primary/30 px-6 text-base transition-all hover:border-primary hover:bg-primary/5 hover:-translate-y-0.5 hover:shadow-primary/30"
                   onClick={() => scrollToSection("portfolio")}
                 >
                   <BriefcaseBusiness className="size-4" />
-                  Explore My Work
-                  <ArrowUpRight className="size-4" />
+                  Explore My Works
                 </Button>
 
                 <Button

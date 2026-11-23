@@ -73,7 +73,16 @@ export default function SiteNav() {
           </Button> */}
           <ThemeToggle />
           <Button
-            render={<a href="#contact" onClick={go("contact")} />}
+            render={
+              <a
+                href="#contact"
+                onClick={() => {
+                  document.getElementById("contact")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+              />
+            }
             nativeButton={false}
             className="hidden rounded-full px-4 sm:inline-flex"
           >
@@ -110,7 +119,16 @@ export default function SiteNav() {
                 ))}
               </ul>
               <Button
-                render={<a href="#contact" onClick={go("contact")} />}
+                render={
+                  <a
+                    href="#contact"
+                    onClick={() => {
+                      document.getElementById("contact")?.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                    }}
+                  />
+                }
                 nativeButton={false}
                 size="lg"
                 className="mt-4 rounded-full"

@@ -33,8 +33,8 @@ function Index() {
         <AboutSection />
         <SkillsSection />
         <ServicesSection />
-        <ExperienceSection />
-        <ProcessSection />
+        {/* <ExperienceSection /> */}
+        {/* <ProcessSection /> */}
         <PortfolioSection />
         <ContactSection />
         <ResumeCTASection />

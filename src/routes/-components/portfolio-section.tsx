@@ -31,7 +31,7 @@ type PreviewImage = {
   alt: string;
 };
 
-type ProjectTab = "excerpt" | "overview" | "challenge" | "solution" | "outcome";
+type ProjectTab =  "overview" | "challenge" | "solution" | "outcome";
 
 const PROJECT_TABS: { id: ProjectTab; label: string }[] = [
   { id: "overview", label: "Overview" },
@@ -184,8 +184,10 @@ function ProjectBlock({
   const reversed = index % 2 === 1;
   const liveUrl = project.links.live;
   const caseStudyUrl = project.links.caseStudy;
+  const repoUrl = project.links.repository;
   const hasLiveUrl = !isPlaceholderUrl(liveUrl);
   const hasCaseStudyUrl = !isPlaceholderUrl(caseStudyUrl);
+  const hasRepoUrl = !isPlaceholderUrl(repoUrl);
 
   return (
     <>
@@ -334,7 +336,7 @@ function ProjectBlock({
             </div>
           )}
 
-          {(hasLiveUrl || hasCaseStudyUrl) && (
+          {(hasLiveUrl || hasCaseStudyUrl || hasRepoUrl) && (
             <div className="flex flex-wrap gap-3 pt-6">
               {hasLiveUrl && (
                 <a
@@ -344,6 +346,18 @@ function ProjectBlock({
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                 >
                   Visit Website
+                  <ArrowUpRightIcon className="size-4" />
+                </a>
+              )}
+
+              {hasRepoUrl && (
+                <a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  View Repository
                   <ArrowUpRightIcon className="size-4" />
                 </a>
               )}
@@ -430,6 +444,19 @@ export default function PortfolioSection() {
           </p>
         </div>
       )}
+      
+      
+      <div className="flex justify-center mt-5">
+        <a
+          href="https://alfecaesar-portfolio2026.vercel.app/#portfolio"
+          target="_blank"
+          rel="noreferrer"
+          className="min-w-sm inline-flex h-10 items-center justify-center gap-2 rounded-full border bg-background/70 px-5 text-sm font-semibold transition-colors hover:bg-secondary"
+        >
+          View More Projects
+          <ExternalLinkIcon className="size-3.5" />
+        </a>
+      </div>
     </SectionShell>
   );
 }
